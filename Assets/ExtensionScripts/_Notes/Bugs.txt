@@ -1,0 +1,10 @@
+ACTIVE BUGS
+
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+FIXED BUGS
+
+(12.04.2019) - Move in hierarchy does not work.
+(00.00.0000) - Move in hierarchy does not work for multiple selected objects that are adjacent to each other.
