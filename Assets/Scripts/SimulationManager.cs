@@ -16,7 +16,8 @@ public class SimulationManager : MonoBehaviour
     /// </summary>
     public const float K = 1f;
 
-    private const float ComputationPeriod = 1f;
+    [SerializeField]
+    private float ComputationPeriod = 1f;
 
     private float timer = 0f;
     
@@ -41,7 +42,7 @@ public class SimulationManager : MonoBehaviour
 
         foreach (var node in nodes)
         {
-            node.isStopped = false;
+            node.AllowComputation();
         }
     }
 }
