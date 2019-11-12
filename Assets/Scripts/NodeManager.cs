@@ -59,7 +59,7 @@ public class NodeManager : MonoBehaviour
 	{
 		var t = transform;
 		var pos = (t.position + Vector3.left * (StaticNodeCount / 2f))
-		          .Scale(2, 1, 1) + Vector3.right + 2 * Vector3.up;
+		          .Scale(2, 1, 1) + Vector3.right * 1.5f + Vector3.up * 2;
 		var go = Instantiate(movingNodePrefab, pos, Quaternion.identity, t);
 		var movingNode = go.GetComponent<MovingNode>();
 		

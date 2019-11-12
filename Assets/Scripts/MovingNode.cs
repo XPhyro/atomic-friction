@@ -1,17 +1,22 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using LJ = PhysicsMaths.LennardJonesPotential;
 
 public class MovingNode : Node
 {
-    private const float TimeStep = 1e-3f;
-    private const float PositionStep = 1e-3f;
+    private const float TimeStep = 1e-6f;
+    private const float PositionStep = 1e-6f;
 
-    public bool isStopped = true;    
+    private bool isStopped = true;    
     
     private readonly Vector2[] recentPositions = new Vector2[2];
     
+    [SerializeField]
+    [ReadOnly]
     private float force;
+    [SerializeField]
+    [ReadOnly]
     private Vector2 nextPosition;
 
     private void Awake()
@@ -41,13 +46,19 @@ public class MovingNode : Node
     {
         Debug.LogWarning("Not yet implemented.");
     }
+
+    public void AllowComputation()
+    {
+        isStopped = false;
+    }
     
     private void UpdateForce()
     {
         var staticNodes = NodeManager.StaticNodes;
+        var movPos = transform.position.x;
         //compute LJ potentials list (where LJ potential is computed in 1D)
-        var diffUs = staticNodes.Select(sn => transform.position.x)
-            .Select(pos => Maths.Differentiate(LJ.GetPotential, pos, PositionStep));
+        var diffUs = staticNodes.Select(node => node.transform.position.x)
+            .Select(pos => Maths.Differentiate(LJ.GetPotential, pos - movPos, PositionStep));
         force = -diffUs.Sum();
     }
 
