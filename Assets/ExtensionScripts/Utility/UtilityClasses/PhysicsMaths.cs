@@ -25,7 +25,6 @@ public class PhysicsMaths
             {
                 const float newR = 0.001f;
 
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if(r == 0)
                 {
                     Debug.LogError("r cannot be 0.");

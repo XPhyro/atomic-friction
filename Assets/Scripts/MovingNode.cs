@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using LJ = PhysicsMaths.LennardJonesPotential;
 
 public class MovingNode : Node
@@ -8,9 +9,9 @@ public class MovingNode : Node
     private const float TimeStep = 1e-6f;
     private const float PositionStep = 1e-6f;
 
-    private bool isStopped = true;    
-    
     private readonly Vector2[] recentPositions = new Vector2[2];
+    
+    private bool isStopped = true;    
     
     [SerializeField]
     [ReadOnly]
@@ -44,6 +45,9 @@ public class MovingNode : Node
 
     private void FixedUpdate()
     {
+        Debug.Log(recentPositions[0]);
+        Debug.Log(recentPositions[1]);
+        //Move();
         Debug.LogWarning("Not yet implemented.");
     }
 
@@ -67,5 +71,14 @@ public class MovingNode : Node
         var p0 = recentPositions[0];
         var p1 = recentPositions[1];
         nextPosition = new Vector2(force / Mass - p1.x + 2 * p0.x, Maths.Avg(p0.y, p1.y));
+    }
+
+    private void Move()
+    {
+        recentPositions[0] = recentPositions[1];
+        var newPos = recentPositions[1] = nextPosition;
+        
+        //move using newPos
+        Debug.LogWarning("Not yet implemented.");
     }
 }
