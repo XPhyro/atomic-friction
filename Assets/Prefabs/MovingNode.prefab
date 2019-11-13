@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1821141616255786732}
   m_Layer: 0
   m_Name: MovingNode
-  m_TagString: Untagged
+  m_TagString: MovingNode
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,3 +93,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a9486c8055a1ef418eebd5618929dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  force: 0
+  nextPosition: {x: 0, y: 0}

@@ -29,11 +29,13 @@ public class SimulationManager : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if(timer >= ComputationPeriod)
+        if(timer < ComputationPeriod)
         {
-            OnComputationTimeReached();
-            timer = 0;
+            return;
         }
+        
+        OnComputationTimeReached();
+        timer = 0;
     }
 
     private static void OnComputationTimeReached()
