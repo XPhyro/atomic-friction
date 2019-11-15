@@ -13,7 +13,12 @@ public class CameraController : MonoBehaviour
     {
         if(!target)
         {
-            target = GameObject.FindGameObjectWithTag(TagHashes.MovingNode).transform;
+            target = NodeManager.MainMovingNode.transform;
+
+            if(!target)
+            {
+                return;
+            }
         }
 
         transform.position = target.position + offset;

@@ -13,6 +13,8 @@ public class NodeManager : MonoBehaviour
 	public static List<MovingNode> MovingNodes = new List<MovingNode>();
 	public static List<Node> Nodes = new List<Node>();
 
+	public static MovingNode MainMovingNode;
+
 	[SerializeField] 
 	private GameObject staticNodePrefab;
 	[SerializeField] 
@@ -59,11 +61,13 @@ public class NodeManager : MonoBehaviour
 	{
 		var t = transform;
 		var pos = (t.position + Vector3.left * (StaticNodeCount / 2f))
-		          .Scale(2, 1, 1) + Vector3.right * 1.5f + Vector3.up * 2;
+		          .Scale(2, 1, 1) + Vector3.right * 5.5f + Vector3.up * 2;
 		var go = Instantiate(movingNodePrefab, pos, Quaternion.identity, t);
 		var movingNode = go.GetComponent<MovingNode>();
 		
 		MovingNodes.Add(movingNode);
 		Nodes.Add(movingNode);
+
+		MainMovingNode = movingNode;
 	}
 }
