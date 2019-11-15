@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using LJ = PhysicsMaths.LennardJonesPotential;
+using LJ = PMaths.LennardJonesPotential;
 
+[RequireComponent(typeof(CharacterController))]
 public class MovingNode : Node
 {
     private const float TimeStep = 1e-6f;
     private const float PositionStep = 1e-6f;
-
-    private readonly Vector2[] recentPositions = new Vector2[2];
+    /// <summary>
+    /// Scaling constant st. we can show the data better, while still computing accurately.
+    /// </summary>
+    public const float ScalingConst = 1e-9f;
     
     private bool isStopped = true;    
     
@@ -19,6 +21,9 @@ public class MovingNode : Node
     [SerializeField]
     [ReadOnly]
     private Vector2 nextPosition;
+    [SerializeField]
+    [ReadOnly]
+    private Vector2[] recentPositions = new Vector2[2];
 
     private void Awake()
     {
@@ -45,10 +50,7 @@ public class MovingNode : Node
 
     private void FixedUpdate()
     {
-        Debug.Log(recentPositions[0]);
-        Debug.Log(recentPositions[1]);
-        //Move();
-        Debug.LogWarning("Not yet implemented.");
+        Move();
     }
 
     public void AllowComputation()
@@ -62,7 +64,7 @@ public class MovingNode : Node
         var movPos = transform.position.x;
         //compute LJ potentials list (where LJ potential is computed in 1D)
         var diffUs = staticNodes.Select(node => node.transform.position.x)
-            .Select(pos => Maths.Differentiate(LJ.GetPotential, pos - movPos, PositionStep));
+            .Select(pos => Maths.Differentiate(LJ.GetPotential, Math.Abs(pos - movPos) * PMaths.MToAngstrom * ScalingConst, PositionStep));
         force = -diffUs.Sum();
     }
 
@@ -70,15 +72,16 @@ public class MovingNode : Node
     {
         var p0 = recentPositions[0];
         var p1 = recentPositions[1];
-        nextPosition = new Vector2(force / Mass - p1.x + 2 * p0.x, Maths.Avg(p0.y, p1.y));
+        nextPosition = new Vector2(force / Mass * PMaths.AngstromToM / ScalingConst - p1.x + 2 * p0.x , Maths.Avg(p0.y, p1.y));
     }
 
     private void Move()
     {
         recentPositions[0] = recentPositions[1];
         var newPos = recentPositions[1] = nextPosition;
-        
-        //move using newPos
-        Debug.LogWarning("Not yet implemented.");
+
+        var delta = newPos - (Vector2)transform.position;
+
+        transform.position += new Vector3(delta.x * Time.fixedDeltaTime, newPos.y);
     }
 }

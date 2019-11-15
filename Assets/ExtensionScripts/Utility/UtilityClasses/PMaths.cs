@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 
-public class PhysicsMaths
+public class PMaths
 {
+    public const float MToAngstrom = 1e10f;
+    public const float AngstromToM = 1e-10f;
+    public const float EVToJ = 1.60218e-19f;
+    public const float JToEV = 6.242e18f;
+    
     public class LennardJonesPotential
     {
         private static float N;
@@ -19,6 +24,11 @@ public class PhysicsMaths
             Debug.Log($"Setting N={N}, Epsilon={epsilon}, K={k}, R0={r0}");
         }
 
+        /// <summary>
+        /// Computes the Lennard-Jones potential.
+        /// </summary>
+        /// <param name="r">r is in Angstrom</param>
+        /// <returns>Returns the Lennard-Jones potential.</returns>
         public static float GetPotential(float r)
         {
             if(Mathf.Approximately(r, 0))
