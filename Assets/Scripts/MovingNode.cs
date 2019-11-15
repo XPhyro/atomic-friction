@@ -44,6 +44,7 @@ public class MovingNode : Node
         
         UpdateForce();
         UpdateNextPosition();
+        SendUIProps();
 
         isStopped = true;
     }
@@ -83,5 +84,19 @@ public class MovingNode : Node
         var delta = newPos - (Vector2)transform.position;
 
         transform.position += new Vector3(delta.x * Time.fixedDeltaTime, newPos.y);
+    }
+
+    private void SendUIProps()
+    {
+        var args = new object[]
+        {
+            force, transform.position.x
+        };
+        var types = new[]
+        {
+            typeof(float), typeof(float)
+        };
+        
+        UIManager.Singleton.UpdateMovingNodeProps(args, types);
     }
 }
