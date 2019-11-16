@@ -255,7 +255,7 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_fontSize
-      value: 21.3
+      value: 31.4
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -275,12 +275,12 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_text
-      value: Position (eV/m)=
+      value: Position (A)=
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 16
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -290,12 +290,12 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -546,7 +546,7 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_fontSize
-      value: 21.3
+      value: 28.85
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -566,7 +566,7 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_text
-      value: Force (eV/m)=
+      value: Force (eV/A)=
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -586,7 +586,7 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fd6a03bfda504f42a23651c6ed10cf4, type: 3}
@@ -856,6 +856,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1201339002}
   - component: {fileID: 1201339001}
+  - component: {fileID: 1201339003}
   m_Layer: 0
   m_Name: SimulationManager
   m_TagString: Untagged
@@ -876,6 +877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ComputationPeriod: 1
+  timer: 0
 --- !u!4 &1201339002
 Transform:
   m_ObjectHideFlags: 0
@@ -890,6 +892,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1201339003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201339000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388fde58b1d8dca0a97b710c4e1e3cd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1232313805
 PrefabInstance:
   m_ObjectHideFlags: 0
