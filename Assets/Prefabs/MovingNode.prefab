@@ -93,5 +93,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a9486c8055a1ef418eebd5618929dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interpolateMovement: 1
+  isStopped: 1
+  canMove: 0
   force: 0
   nextPosition: {x: 0, y: 0}
+  recentPositions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}

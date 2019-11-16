@@ -1,9 +1,11 @@
-﻿using System;
+﻿#define LIMIT_COMPUTATION
+//#define LIMIT_MOVEMENT
+
+using System;
 using System.Linq;
 using UnityEngine;
 using LJ = PMaths.LennardJonesPotential;
 
-[RequireComponent(typeof(CharacterController))]
 public class MovingNode : Node
 {
     private const float TimeStep = 1e-6f;
@@ -12,8 +14,16 @@ public class MovingNode : Node
     /// Scaling constant st. we can show the data better, while still computing accurately.
     /// </summary>
     public const float ScalingConst = 1e-9f;
+
+    [SerializeField]
+    private bool interpolateMovement;
     
-    private bool isStopped = true;    
+    [SerializeField]
+    [ReadOnly]
+    private bool isStopped = true;
+    [SerializeField]
+    [ReadOnly]
+    private bool canMove = false;
     
     [SerializeField]
     [ReadOnly]
@@ -33,25 +43,45 @@ public class MovingNode : Node
     private void Start()
     {
         recentPositions[0] = recentPositions[1] = transform.position;
+        
+        SendUIProps();
     }
 
     private void Update()
     {
+#if LIMIT_COMPUTATION  
         if(isStopped)
         {
             return;
         }
+#endif
         
         UpdateForce();
         UpdateNextPosition();
         SendUIProps();
 
+#if LIMIT_MOVEMENT
+        canMove = true;
+#endif
+#if LIMIT_COMPUTATION
         isStopped = true;
+#endif
     }
 
     private void FixedUpdate()
     {
+#if LIMIT_MOVEMENT
+        if(!canMove)
+        {
+            return;
+        }
+#endif
+        
         Move();
+    
+#if LIMIT_MOVEMENT
+        canMove = false;
+#endif
     }
 
     public void AllowComputation()
@@ -78,12 +108,17 @@ public class MovingNode : Node
 
     private void Move()
     {
+        if(!interpolateMovement && nextPosition == recentPositions[1])
+        {
+            return;
+        }
+        
         recentPositions[0] = recentPositions[1];
         var newPos = recentPositions[1] = nextPosition;
 
         var delta = newPos - (Vector2)transform.position;
 
-        transform.position += new Vector3(delta.x * Time.fixedDeltaTime, newPos.y);
+        transform.position += new Vector3(delta.x * Time.fixedDeltaTime, 0);
     }
 
     private void SendUIProps()

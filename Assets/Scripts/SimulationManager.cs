@@ -15,13 +15,26 @@ public class SimulationManager : MonoBehaviour
     /// </summary>
     public const float K = 1f;
 
+    public static SimulationManager Singleton;
+    
     [SerializeField]
-    private float ComputationPeriod = 1f;
+    private float ComputationPeriod = 0.25f;
 
+    [SerializeField]
+    [ReadOnly]
     private float timer = 0f;
     
     private void Start()
     {
+        if(Singleton)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Singleton = this;
+        }
+        
         NodeManager.Singleton.Initialise();
     }
 
@@ -39,11 +52,6 @@ public class SimulationManager : MonoBehaviour
 
     private static void OnComputationTimeReached()
     {
-        var nodes = NodeManager.MovingNodes;
-
-        foreach (var node in nodes)
-        {
-            node.AllowComputation();
-        }
+        NodeManager.MovingNodes.ForEach(x => x.AllowComputation());
     }
 }
