@@ -8,6 +8,16 @@ using LJ = PMaths.LennardJonesPotential;
 
 public class MovingNode : Node
 {
+    public enum LimitationMethod
+    {
+        Full, Computation, Movement, None
+    }
+    
+    public enum InterpolationMethod
+    {
+        Movement, None
+    }
+
     private const float TimeStep = 1e-6f;
     private const float PositionStep = 1e-6f;
     /// <summary>
@@ -35,6 +45,13 @@ public class MovingNode : Node
     [ReadOnly]
     private Vector2[] recentPositions = new Vector2[2];
 
+    [SerializeField]
+    [ReadOnly]
+    private LimitationMethod limitationMethod;
+    [SerializeField]
+    [ReadOnly]
+    private InterpolationMethod interpolationMethod;
+    
     private void Awake()
     {
         LJ.SetConstants(SimulationManager.K, SimulationManager.Epsilon, SimulationManager.R0);        
@@ -43,6 +60,20 @@ public class MovingNode : Node
     private void Start()
     {
         recentPositions[0] = recentPositions[1] = transform.position;
+        
+#if LIMIT_COMPUTATION
+#if LIMIT_MOVEMENT
+        limitationMethod = LimitationMethod.Full;
+#else
+        limitationMethod = LimitationMethod.Computation;
+#endif
+#elif LIMIT_MOVEMENT
+        limitationMethod = LimitationMethod.Movement;
+#else
+        limitationMethod = LimitationMethod.None;
+#endif
+
+        interpolationMethod = interpolateMovement ? InterpolationMethod.Movement : InterpolationMethod.None;        
         
         SendUIProps();
     }
@@ -123,13 +154,15 @@ public class MovingNode : Node
 
     private void SendUIProps()
     {
+        var isInterpolationOn = false;
+        
         var args = new object[]
         {
-            force, transform.position.x
+            force, transform.position.x, limitationMethod, interpolationMethod
         };
         var types = new[]
         {
-            typeof(float), typeof(float)
+            typeof(float), typeof(float), typeof(LimitationMethod), typeof(InterpolationMethod)
         };
         
         UIManager.Singleton.UpdateMovingNodeProps(args, types);

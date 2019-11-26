@@ -18,7 +18,7 @@ public class SimulationManager : MonoBehaviour
     public static SimulationManager Singleton;
     
     [SerializeField]
-    private float ComputationPeriod = 0.25f;
+    private float ComputationPeriod = 1f;
 
     [SerializeField]
     [ReadOnly]
