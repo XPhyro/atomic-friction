@@ -15,6 +15,14 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI posText;
     [SerializeField]
     private TextMeshProUGUI posValText;
+    [SerializeField]
+    private TextMeshProUGUI limitText;
+    [SerializeField]
+    private TextMeshProUGUI limitValText;
+    [SerializeField]
+    private TextMeshProUGUI interpolationText;
+    [SerializeField]
+    private TextMeshProUGUI interpolationValText;
 
     private void Start()
     {
@@ -29,6 +37,8 @@ public class UIManager : MonoBehaviour
         
         forceText.text = "Force (eV/A)=";
         posText.text = "Position (A)=";
+        limitText.text = "Limiting: ";
+        interpolationText.text = "Interp.: ";
     }
 
     public void UpdateMovingNodeProps(object[] args, Type[] types)
@@ -55,5 +65,7 @@ public class UIManager : MonoBehaviour
 
         forceValText.text = s[0];
         posValText.text = s[1];
+        limitValText.text = s[2];
+        interpolationValText.text = s[3];
     }
 }
