@@ -34,7 +34,8 @@ public class MovingNode : Node
     [SerializeField]
     [ReadOnly]
     private bool canMove = false;
-    
+
+
     [SerializeField]
     [ReadOnly]
     private float force;
@@ -44,6 +45,9 @@ public class MovingNode : Node
     [SerializeField]
     [ReadOnly]
     private Vector2[] recentPositions = new Vector2[2];
+    [SerializeField]
+    [ReadOnly]
+    private float velocity;
 
     [SerializeField]
     [ReadOnly]
@@ -51,6 +55,8 @@ public class MovingNode : Node
     [SerializeField]
     [ReadOnly]
     private InterpolationMethod interpolationMethod;
+
+    private float prevPos;
     
     private void Awake()
     {
@@ -62,11 +68,11 @@ public class MovingNode : Node
         recentPositions[0] = recentPositions[1] = transform.position;
         
 #if LIMIT_COMPUTATION
-#if LIMIT_MOVEMENT
+    #if LIMIT_MOVEMENT
         limitationMethod = LimitationMethod.Full;
-#else
+    #else
         limitationMethod = LimitationMethod.Computation;
-#endif
+    #endif
 #elif LIMIT_MOVEMENT
         limitationMethod = LimitationMethod.Movement;
 #else
@@ -89,7 +95,6 @@ public class MovingNode : Node
         
         UpdateForce();
         UpdateNextPosition();
-        SendUIProps();
 
 #if LIMIT_MOVEMENT
         canMove = true;
@@ -115,6 +120,12 @@ public class MovingNode : Node
 #endif
     }
 
+    private void LateUpdate()
+    {
+        ComputeCurrentVelocity();
+        SendUIProps();
+    }
+
     public void AllowComputation()
     {
         isStopped = false;
@@ -137,6 +148,15 @@ public class MovingNode : Node
         nextPosition = new Vector2(force / Mass * PMaths.AngstromToM / ScalingConst - p1.x + 2 * p0.x , Maths.Avg(p0.y, p1.y));
     }
 
+    private void ComputeCurrentVelocity()
+    {
+//        throw new NotImplementedException();
+
+        var currentPos = transform.position.x;
+        velocity = (currentPos - prevPos) / Time.fixedDeltaTime;
+        prevPos = currentPos;
+    }
+
     private void Move()
     {
         if(!interpolateMovement && nextPosition == recentPositions[1])
@@ -154,15 +174,13 @@ public class MovingNode : Node
 
     private void SendUIProps()
     {
-        var isInterpolationOn = false;
-        
         var args = new object[]
         {
-            force, transform.position.x, limitationMethod, interpolationMethod
+            force, transform.position.x, limitationMethod, interpolationMethod, velocity
         };
         var types = new[]
         {
-            typeof(float), typeof(float), typeof(LimitationMethod), typeof(InterpolationMethod)
+            typeof(float), typeof(float), typeof(LimitationMethod), typeof(InterpolationMethod), typeof(float)
         };
         
         UIManager.Singleton.UpdateMovingNodeProps(args, types);
