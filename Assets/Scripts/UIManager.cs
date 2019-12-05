@@ -27,6 +27,13 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI velocityText;
     [SerializeField]
     private TextMeshProUGUI velocityValText;
+    [SerializeField]
+    private TextMeshProUGUI staticNodeCountText;
+    [SerializeField]
+    private TextMeshProUGUI staticNodeCountValText;
+    
+    [SerializeField]
+    private TextMeshProUGUI forceDisclaimerText;
 
     private void Start()
     {
@@ -44,6 +51,12 @@ public class UIManager : MonoBehaviour
         limitText.text = "Limiting:";
         interpolationText.text = "Interpolation:";
         velocityText.text = "Vel. (A/s)=";
+        staticNodeCountText.text = "S. Node Count=";
+        staticNodeCountValText.text = NodeManager.StaticNodeCount.ToString();
+        
+        forceDisclaimerText.text = "*Force is shown only when it was computed for all nodes. " +
+                              "Closer nodes may be updated faster than shown for some " +
+                              "limiting/interpolation mode combinations.";
     }
 
     public void UpdateMovingNodeProps(object[] args, Type[] types)

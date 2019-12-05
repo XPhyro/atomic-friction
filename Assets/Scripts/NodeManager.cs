@@ -5,9 +5,9 @@ using Extension.Native;
 
 public class NodeManager : MonoBehaviour
 {
-	private const uint StaticNodeCount = 50;
+	public const uint StaticNodeCount = 2000;
 
-	public static NodeManager Singleton; 
+	public static NodeManager Singleton;
 	
 	public static List<StaticNode> StaticNodes = new List<StaticNode>();
 	public static List<MovingNode> MovingNodes = new List<MovingNode>();
