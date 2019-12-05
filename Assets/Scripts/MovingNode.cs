@@ -150,8 +150,6 @@ public class MovingNode : Node
 
     private void ComputeCurrentVelocity()
     {
-//        throw new NotImplementedException();
-
         var currentPos = transform.position.x;
         velocity = (currentPos - prevPos) / Time.fixedDeltaTime;
         prevPos = currentPos;

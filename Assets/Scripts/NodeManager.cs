@@ -42,14 +42,16 @@ public class NodeManager : MonoBehaviour
 	{
 		var refGo = staticNodePrefab;
 		var gos = new List<GameObject>();
+		var t = transform;
+		var holder = new GameObject().transform;
+		holder.SetParent(t);
 
 		//create static nodes in a line
 		for(var i = 0; i < StaticNodeCount; i++)
 		{
-			var t = transform;
 			var pos = (t.position + Vector3.right * (i - StaticNodeCount / 2f))
 			          .Scale(2, 1, 1) + Vector3.right;
-			var go = Instantiate(refGo, pos, Quaternion.identity, t);
+			var go = Instantiate(refGo, pos, Quaternion.identity, holder);
 			gos.Add(go);
 		}
 
