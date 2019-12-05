@@ -2,6 +2,7 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using LJ = PMaths.LennardJonesPotential;
 
 public class UIManager : MonoBehaviour
 {
@@ -31,7 +32,9 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI staticNodeCountText;
     [SerializeField]
     private TextMeshProUGUI staticNodeCountValText;
-    
+
+    [SerializeField]
+    private TextMeshProUGUI constantsText;
     [SerializeField]
     private TextMeshProUGUI forceDisclaimerText;
 
@@ -53,7 +56,8 @@ public class UIManager : MonoBehaviour
         velocityText.text = "Vel. (A/s)=";
         staticNodeCountText.text = "S. Node Count=";
         staticNodeCountValText.text = NodeManager.StaticNodeCount.ToString();
-        
+
+        constantsText.text = $"N={LJ.N}, \\epsilon={LJ.Epsilon}, K={LJ.K}, R_0={LJ.R0}";
         forceDisclaimerText.text = "*Force is shown only when it was computed for all nodes. " +
                               "Closer nodes may be updated faster than shown for some " +
                               "limiting/interpolation mode combinations.";
