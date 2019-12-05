@@ -9,10 +9,10 @@ public class PMaths
     
     public class LennardJonesPotential
     {
-        private static float N;
-        private static float Epsilon;
-        private static float K;
-        private static float R0;
+        public static float N;
+        public static float Epsilon;
+        public static float K;
+        public static float R0;
 
         public static void SetConstants(float k, float epsilon, float r0)
         {
