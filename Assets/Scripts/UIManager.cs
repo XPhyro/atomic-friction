@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour
             Singleton = this;
         }
         
-        forceText.text = "Force (eV/A)=";
+        forceText.text = "Force* (eV/A)=";
         posText.text = "Position (A)=";
         limitText.text = "Limiting:";
         interpolationText.text = "Interpolation:";
@@ -73,6 +73,5 @@ public class UIManager : MonoBehaviour
         limitValText.text = s[2];
         interpolationValText.text = s[3];
         velocityValText.text = s[4];
-        //velocityValText.text = "Not implemented";
     }
 }

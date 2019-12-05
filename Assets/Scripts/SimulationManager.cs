@@ -18,6 +18,8 @@ public class SimulationManager : MonoBehaviour
     public static SimulationManager Singleton;
     
     [SerializeField]
+    [Tooltip("Computation period for ALL NODES. Depending on the selected interpolation mode, the " +
+             "closer nodes may be computed with a lower period.")]
     private float ComputationPeriod = 1f;
 
     [SerializeField]
