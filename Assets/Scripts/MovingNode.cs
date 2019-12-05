@@ -2,28 +2,34 @@
 //#define LIMIT_MOVEMENT
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 using LJ = PMaths.LennardJonesPotential;
 
 public class MovingNode : Node
 {
-    public enum LimitationMethod
-    {
-        Full, Computation, Movement, None
-    }
+    private const float FullMinPosLimit = 0.005f;
+    private const float ComputationMinPosLimit = 0.005f;
+    private const float MovementMinPosLimit = 0.000f;
+    private const float NoneMinPosLimit = 0.000f;
+    private const float VelocityToPosLimitConversion = 0.001f;
     
-    public enum InterpolationMethod
-    {
-        Movement, None
-    }
-
     private const float TimeStep = 1e-6f;
     private const float PositionStep = 1e-6f;
     /// <summary>
     /// Scaling constant st. we can show the data better, while still computing accurately.
     /// </summary>
     public const float ScalingConst = 1e-9f;
+
+    private enum LimitationMethod
+    {
+        Full, Computation, Movement, None
+    }
+    private enum InterpolationMethod
+    {
+        Movement, None
+    }
 
     [SerializeField]
     private bool interpolateMovement;
@@ -34,7 +40,6 @@ public class MovingNode : Node
     [SerializeField]
     [ReadOnly]
     private bool canMove = false;
-
 
     [SerializeField]
     [ReadOnly]
@@ -56,11 +61,22 @@ public class MovingNode : Node
     [ReadOnly]
     private InterpolationMethod interpolationMethod;
 
+    [SerializeField] 
+    [ReadOnly] 
+    private float minPosLimit = 0.005f;
+
     private float prevPos;
     
     private void Awake()
     {
-        LJ.SetConstants(SimulationManager.K, SimulationManager.Epsilon, SimulationManager.R0);        
+        LJ.SetConstants(SimulationManager.K, SimulationManager.Epsilon, SimulationManager.R0);
+
+        //TESTING
+//        for(int i = 0; i < 100; i++)
+//        {
+//            Debug.Log(Maths.Differentiate(LJ.GetPotential, 
+//                Math.Abs(0.001f * i) * PMaths.MToAngstrom * ScalingConst, PositionStep));
+//        }
     }
 
     private void Start()
@@ -79,9 +95,22 @@ public class MovingNode : Node
         limitationMethod = LimitationMethod.None;
 #endif
 
-        interpolationMethod = interpolateMovement ? InterpolationMethod.Movement : InterpolationMethod.None;        
+        interpolationMethod = interpolateMovement ? InterpolationMethod.Movement : InterpolationMethod.None;
+
+        switch(limitationMethod)
+        {
+            case LimitationMethod.Computation:
+                minPosLimit = ComputationMinPosLimit;
+                break;
+            case LimitationMethod.None:
+                minPosLimit = NoneMinPosLimit;
+                break;
+            default:
+                minPosLimit = ComputationMinPosLimit;
+                break;
+        }
         
-        SendUIProps();
+        SendUIProperties();
     }
 
     private void Update()
@@ -123,7 +152,7 @@ public class MovingNode : Node
     private void LateUpdate()
     {
         ComputeCurrentVelocity();
-        SendUIProps();
+        SendUIProperties();
     }
 
     public void AllowComputation()
@@ -135,9 +164,27 @@ public class MovingNode : Node
     {
         var staticNodes = NodeManager.StaticNodes;
         var movPos = transform.position.x;
+        
+        var minPosLim = minPosLimit;
+        
+        if(limitationMethod == LimitationMethod.Movement)
+        {
+            minPosLim = MovementMinPosLimit + velocity * VelocityToPosLimitConversion;
+        }
+        else if(limitationMethod == LimitationMethod.Full)
+        {
+            minPosLim = FullMinPosLimit + velocity * VelocityToPosLimitConversion;
+        }
+        
         //compute LJ potentials list (where LJ potential is computed in 1D)
-        var diffUs = staticNodes.Select(node => node.transform.position.x)
-            .Select(pos => Maths.Differentiate(LJ.GetPotential, Math.Abs(pos - movPos) * PMaths.MToAngstrom * ScalingConst, PositionStep));
+        var diffUs = staticNodes
+            .Select(node => node.transform.position.x)
+            .Select(pos => Maths.Differentiate(
+                LJ.GetPotential, 
+                Mathf.Clamp(
+                    Math.Abs(pos - movPos), minPosLim, float.PositiveInfinity)
+                * PMaths.MToAngstrom * ScalingConst, 
+                PositionStep));
         force = -diffUs.Sum();
     }
 
@@ -165,12 +212,16 @@ public class MovingNode : Node
         recentPositions[0] = recentPositions[1];
         var newPos = recentPositions[1] = nextPosition;
 
-        var delta = newPos - (Vector2)transform.position;
+        var t = transform;
+        var pos = t.position;
+        var delta = newPos - (Vector2)pos;
 
-        transform.position += new Vector3(delta.x * Time.fixedDeltaTime, 0);
+        pos += new Vector3(delta.x * Time.fixedDeltaTime, 0);
+        t.position = pos;
     }
 
-    private void SendUIProps()
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    private void SendUIProperties()
     {
         var args = new object[]
         {
