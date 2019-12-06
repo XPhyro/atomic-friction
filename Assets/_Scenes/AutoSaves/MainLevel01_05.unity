@@ -2024,6 +2024,7 @@ MonoBehaviour:
   velocityValText: {fileID: 1077543318}
   staticNodeCountText: {fileID: 463927972}
   staticNodeCountValText: {fileID: 1069567961}
+  constantsText: {fileID: 1877341833}
   forceDisclaimerText: {fileID: 1050715148}
 --- !u!4 &1012868766
 Transform:
@@ -2199,7 +2200,7 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -2229,7 +2230,7 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_textAlignment
-      value: 1025
+      value: 513
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -2778,7 +2779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d6e73415f0b92b6b42e5b9f306b447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ComputationPeriod: 1
+  computationPeriod: 1
   timer: 0
 --- !u!4 &1201339002
 Transform:
@@ -3777,7 +3778,7 @@ PrefabInstance:
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
       propertyPath: m_textAlignment
-      value: 1025
+      value: 513
       objectReference: {fileID: 0}
     - target: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
         type: 3}
@@ -3818,6 +3819,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1877341833 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1353799498147008034, guid: 0fd6a03bfda504f42a23651c6ed10cf4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1877341829}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877341831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1878640516
 GameObject:
   m_ObjectHideFlags: 0
