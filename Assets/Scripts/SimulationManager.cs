@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SimulationManager : MonoBehaviour
 {
@@ -18,9 +19,10 @@ public class SimulationManager : MonoBehaviour
     public static SimulationManager Singleton;
     
     [SerializeField]
+    [FormerlySerializedAs("ComputationPeriod")]
     [Tooltip("Computation period for ALL NODES. Depending on the selected interpolation mode, the " +
              "closer nodes may be computed with a lower period.")]
-    private float ComputationPeriod = 1f;
+    private float computationPeriod = 1f;
 
     [SerializeField]
     [ReadOnly]
@@ -43,7 +45,7 @@ public class SimulationManager : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if(timer < ComputationPeriod)
+        if(timer < computationPeriod)
         {
             return;
         }

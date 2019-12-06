@@ -10,7 +10,7 @@ using LJ = PMaths.LennardJonesPotential;
 public class MovingNode : Node
 {
     private const float FullMinPosLimit = 0.005f;
-    private const float ComputationMinPosLimit = 0.005f;
+    private const float ComputationMinPosLimit = 0.2f;//0.005f;
     private const float MovementMinPosLimit = 0.000f;
     private const float NoneMinPosLimit = 0.000f;
     private const float VelocityToPosLimitConversion = 0.001f;
@@ -176,16 +176,23 @@ public class MovingNode : Node
             minPosLim = FullMinPosLimit + velocity * VelocityToPosLimitConversion;
         }
         
-        //compute LJ potentials list (where LJ potential is computed in 1D)
+        //compute LJ potentials list (in 1D)
         var diffUs = staticNodes
             .Select(node => node.transform.position.x)
             .Select(pos => Maths.Differentiate(
-                LJ.GetPotential, 
+                LJ.GetPotential,
                 Mathf.Clamp(
                     Math.Abs(pos - movPos), minPosLim, float.PositiveInfinity)
-                * PMaths.MToAngstrom * ScalingConst, 
+                * PMaths.MToAngstrom * ScalingConst,
                 PositionStep));
         force = -diffUs.Sum();
+
+#if UNITY_EDITOR
+        if(force > 100)
+        {
+            Debug.Log(force);
+        }
+#endif
     }
 
     private void UpdateNextPosition()

@@ -65,7 +65,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateMovingNodeProps(object[] args, Type[] types)
     {
-        if(args.Count() != types.Length)
+        if(args.Length != types.Length)
         {
             return;
         }
