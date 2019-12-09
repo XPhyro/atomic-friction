@@ -5,7 +5,7 @@ using Extension.Native;
 
 public class NodeManager : MonoBehaviour
 {
-	public const uint StaticNodeCount = 2000;
+	public const uint StaticNodeCount = 5000;//500000;
 
 	public static NodeManager Singleton;
 	

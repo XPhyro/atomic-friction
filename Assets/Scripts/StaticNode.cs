@@ -11,6 +11,7 @@ public class StaticNode : Node
     
     private void Update()
     {
+#if UNITY_EDITOR
         if(!mn)
         {
             mn = NodeManager.MainMovingNode.transform;
@@ -22,5 +23,6 @@ public class StaticNode : Node
         }
 
         distanceToMainMovingNode = (mn.position.x - transform.position.x) * PMaths.MToAngstrom * MovingNode.ScalingConst;
+#endif
     }
 }
