@@ -1,42 +1,60 @@
 ﻿using System;
-using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using LJ = PMaths.LennardJonesPotential;
 
 public class UIManager : MonoBehaviour
 {
+    private const float MaxExpectedForce = 2f;
+    private const float MaxExpectedPos = 4000f;
+    private const float MaxExpectedVelocity = 4000f;
+    
     public static UIManager Singleton;
     
     [SerializeField]
     private TextMeshProUGUI forceText;
     [SerializeField]
-    private TextMeshProUGUI forceValText;
-    [SerializeField]
     private TextMeshProUGUI posText;
-    [SerializeField]
-    private TextMeshProUGUI posValText;
     [SerializeField]
     private TextMeshProUGUI limitText;
     [SerializeField]
-    private TextMeshProUGUI limitValText;
-    [SerializeField]
     private TextMeshProUGUI interpolationText;
-    [SerializeField]
-    private TextMeshProUGUI interpolationValText;
     [SerializeField]
     private TextMeshProUGUI velocityText;
     [SerializeField]
-    private TextMeshProUGUI velocityValText;
-    [SerializeField]
     private TextMeshProUGUI staticNodeCountText;
-    [SerializeField]
-    private TextMeshProUGUI staticNodeCountValText;
 
+    [SerializeField]
+    private TextMeshProUGUI[] valTexts;
+    
     [SerializeField]
     private TextMeshProUGUI constantsText;
     [SerializeField]
     private TextMeshProUGUI forceDisclaimerText;
+
+    [SerializeField]
+    private Image negForceImage;
+    [SerializeField]
+    private Image posForceImage;
+    [SerializeField]
+    private Image negPosImage;
+    [SerializeField]
+    private Image posPosImage;
+    [SerializeField]
+    private Image negVelImage;
+    [SerializeField]
+    private Image posVelImage;
+    
+    [SerializeField]
+    private Image[][] negPosImages;
+
+    private readonly float[] maxExpectedValues = 
+    {
+        MaxExpectedForce,
+        MaxExpectedPos,
+        MaxExpectedVelocity
+    };
 
     private void Start()
     {
@@ -49,18 +67,25 @@ public class UIManager : MonoBehaviour
             Singleton = this;
         }
         
-        forceText.text = "Force* (eV/A)=";
-        posText.text = "Position (A)=";
-        limitText.text = "Limiting:";
-        interpolationText.text = "Interpolation:";
-        velocityText.text = "Vel. (A/s)=";
-        staticNodeCountText.text = "S. Node Count=";
-        staticNodeCountValText.text = NodeManager.StaticNodeCount.ToString();
+        forceText.text = "Force* (eV/A)";
+        posText.text = "Position (A)";
+        velocityText.text = "Velocity (A/s)";
+        limitText.text = "Limiting";
+        interpolationText.text = "Interpolation";
+        staticNodeCountText.text = "Static node count";
+        valTexts[5].text = NodeManager.StaticNodeCount.ToString();
 
-        constantsText.text = $"N={LJ.N}, \\epsilon={LJ.Epsilon}, K={LJ.K}, R_0={LJ.R0}";
-        forceDisclaimerText.text = "*Force is shown only when it was computed for all nodes. " +
+        constantsText.text = $"N={LJ.N}, \\epsilon={LJ.Epsilon} eV, K={LJ.K} eV/A^2, R_0={LJ.R0} A";
+        forceDisclaimerText.text = "*Force is shown only when it is computed for all nodes. " +
                               "Closer nodes may be updated faster than shown for some " +
                               "limiting/interpolation mode combinations.";
+        
+        negPosImages = new[]
+        {
+            new[] {negForceImage, posForceImage},
+            new[] {negPosImage, posPosImage},
+            new[] {negVelImage, posVelImage}
+        };
     }
 
     public void UpdateMovingNodeProps(object[] args, Type[] types)
@@ -71,12 +96,20 @@ public class UIManager : MonoBehaviour
         }
 
         var s = new string[args.Length];
+
+        var props = new float[3];
         
-        for(int i = 0; i < args.Length; i++)
+        for(var i = 0; i < args.Length; i++)
         {
             try
             {
-                s[i] = Convert.ChangeType(args[i], types[i]).ToString();
+                var obj = Convert.ChangeType(args[i], types[i]);
+                s[i] = obj.ToString();
+
+                if(i <= 2)
+                {
+                    props[i] = (float)obj;
+                }
             }
             catch(Exception e)
             {
@@ -85,10 +118,23 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        forceValText.text = s[0];
-        posValText.text = s[1];
-        limitValText.text = s[2];
-        interpolationValText.text = s[3];
-        velocityValText.text = s[4];
+        for(var i = 0; i < s.Length; i++)
+        {
+            valTexts[i].text = s[i];
+        }
+
+        for(var i = 0; i < props.Length; i++)
+        {
+            var prop = props[i];
+            var index = prop >= 0 ? 1 : 0;
+
+            for(var j = 0; j < negPosImages.Length; j++)
+            {
+                var image = negPosImages[i][index];
+                var fill = Mathf.Abs(prop / maxExpectedValues[i]);
+                image.fillAmount = index == j ? fill : 0;
+                image.color = Color.Lerp(Color.green, Color.red, fill);
+            }
+        }
     }
 }

@@ -167,6 +167,7 @@ public class MovingNode : Node
         
         var minPosLim = minPosLimit;
         
+        // ReSharper disable once ConvertIfStatementToSwitchStatement
         if(limitationMethod == LimitationMethod.Movement)
         {
             minPosLim = MovementMinPosLimit + velocity * VelocityToPosLimitConversion;
@@ -199,7 +200,8 @@ public class MovingNode : Node
     {
         var p0 = recentPositions[0];
         var p1 = recentPositions[1];
-        nextPosition = new Vector2(force / Mass * PMaths.AngstromToM / ScalingConst - p1.x + 2 * p0.x , Maths.Avg(p0.y, p1.y));
+        nextPosition = new Vector2(force / Mass * PMaths.AngstromToM / ScalingConst - p1.x + 2 * p0.x,
+                                    Maths.Avg(p0.y, p1.y));
     }
 
     private void ComputeCurrentVelocity()
@@ -232,11 +234,19 @@ public class MovingNode : Node
     {
         var args = new object[]
         {
-            force, transform.position.x, limitationMethod, interpolationMethod, velocity
+            force,
+            transform.position.x,            
+            velocity,
+            limitationMethod,
+            interpolationMethod
         };
         var types = new[]
         {
-            typeof(float), typeof(float), typeof(LimitationMethod), typeof(InterpolationMethod), typeof(float)
+            typeof(float),
+            typeof(float),
+            typeof(float),
+            typeof(LimitationMethod), 
+            typeof(InterpolationMethod)
         };
         
         UIManager.Singleton.UpdateMovingNodeProps(args, types);
