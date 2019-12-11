@@ -5,7 +5,7 @@ using Extension.Native;
 
 public class NodeManager : MonoBehaviour
 {
-	public const uint StaticNodeCount = 5000;//500000;
+	public const uint StaticNodeCount = 2500;//500000;
 
 	public static NodeManager Singleton;
 	
@@ -44,6 +44,7 @@ public class NodeManager : MonoBehaviour
 		var gos = new List<GameObject>();
 		var t = transform;
 		var holder = new GameObject().transform;
+		holder.name = "StaticNodes";
 		holder.SetParent(t);
 
 		//create static nodes in a line
@@ -52,6 +53,7 @@ public class NodeManager : MonoBehaviour
 			var pos = (t.position + Vector3.right * (i - StaticNodeCount / 2f))
 			          .Scale(2, 1, 1) + Vector3.right;
 			var go = Instantiate(refGo, pos, Quaternion.identity, holder);
+			go.name = $"StaticNode_{i}";
 			gos.Add(go);
 		}
 
@@ -65,6 +67,7 @@ public class NodeManager : MonoBehaviour
 		var pos = (t.position + Vector3.left * (StaticNodeCount / 2f))
 		          .Scale(2, 1, 1) + Vector3.right * 5.5f + Vector3.up * 2;
 		var go = Instantiate(movingNodePrefab, pos, Quaternion.identity, t);
+		go.name = "MovingNode";
 		var movingNode = go.GetComponent<MovingNode>();
 		
 		MovingNodes.Add(movingNode);
