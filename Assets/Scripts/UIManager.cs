@@ -6,9 +6,9 @@ using LJ = PMaths.LennardJonesPotential;
 
 public class UIManager : MonoBehaviour
 {
-    private const float MaxExpectedForce = 2f;
-    private const float MaxExpectedPos = 4000f;
-    private const float MaxExpectedVelocity = 4000f;
+    private const float MaxExpectedForce = 1.6f;
+    private const float MaxExpectedPos = NodeManager.StaticNodeCount;
+    private const float MaxExpectedVelocity = NodeManager.StaticNodeCount * (0.02f / SimulationManager.FixedTimeStep);
     
     public static UIManager Singleton;
     
@@ -97,18 +97,18 @@ public class UIManager : MonoBehaviour
 
         var s = new string[args.Length];
 
-        var props = new float[3];
+        var propVals = new float[3];
         
         for(var i = 0; i < args.Length; i++)
         {
             try
             {
-                var obj = Convert.ChangeType(args[i], types[i]);
-                s[i] = obj.ToString();
+                var propObj = Convert.ChangeType(args[i], types[i]);
+                s[i] = propObj.ToString();
 
                 if(i <= 2)
                 {
-                    props[i] = (float)obj;
+                    propVals[i] = (float)propObj;
                 }
             }
             catch(Exception e)
@@ -123,17 +123,16 @@ public class UIManager : MonoBehaviour
             valTexts[i].text = s[i];
         }
 
-        for(var i = 0; i < props.Length; i++)
+        for(var i = 0; i < propVals.Length; i++)
         {
-            var prop = props[i];
-            var index = prop >= 0 ? 1 : 0;
-
-            for(var j = 0; j < negPosImages.Length; j++)
+            var propVal = propVals[i];
+            var index = propVal >= 0 ? 1 : 0;
+            
+            for(var j = 0; j < negPosImages[i].Length; j++)
             {
-                var image = negPosImages[i][index];
-                var fill = Mathf.Abs(prop / maxExpectedValues[i]);
-                image.fillAmount = index == j ? fill : 0;
-                image.color = Color.Lerp(Color.green, Color.red, fill);
+                var image = negPosImages[i][j];
+                image.fillAmount = j == index ? Mathf.Abs(propVal / maxExpectedValues[i]) : 0;
+                image.color = Color.Lerp(Color.green, Color.red, image.fillAmount);
             }
         }
     }

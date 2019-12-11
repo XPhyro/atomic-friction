@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 public class SimulationManager : MonoBehaviour
@@ -16,6 +17,8 @@ public class SimulationManager : MonoBehaviour
     /// </summary>
     public const float K = 1f;
 
+    public const float FixedTimeStep = 0.002f;
+
     public static SimulationManager Singleton;
     
     [SerializeField]
@@ -27,7 +30,12 @@ public class SimulationManager : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     private float timer = 0f;
-    
+
+    private void Awake()
+    {
+        Time.fixedDeltaTime = FixedTimeStep;
+    }
+
     private void Start()
     {
         if(Singleton)
